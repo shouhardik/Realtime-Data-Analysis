@@ -1,0 +1,46 @@
+Connect to EC2 instance(Amazon Linux) using SSH
+
+Install Kafka:
+wget https://downloads.apache.org/kafka/3.7.1/kafka_2.13-3.7.1.tgz
+
+Uncompress Kafka:
+tar -xzf kafka_2.13-3.7.1.tgz
+
+Install Java:
+sudo yum install java
+
+Go to the Directory:
+cd kafka_2.13-3.7.1
+
+Start Zoo-keeper:
+-----------------------------------------------
+bin/zookeeper-server-start.sh config/zookeeper.properties
+
+Stop Zookeeper:
+---------------------------------
+sudo bin/zookeeper-server-stop.sh
+
+Edit the Private IP to public IP:
+--------------------------------------
+sudo nano config/server.properties
+
+Start Kafka-server:
+----------------------------------
+export KAFKA_HEAP_OPTS="-Xmx256M -Xms128M"
+
+bin/kafka-server-start.sh config/server.properties
+
+Create the topic:
+-----------------------------
+cd kafka_2.13-3.7.1
+bin/kafka-topics.sh --create --topic {kafkaTopic} --bootstrap-server {myIP}:9092 --replication-factor 1 --partitions 1
+
+Start Producer:
+--------------------------
+bin/kafka-console-producer.sh --topic {kafkaTopic} --bootstrap-server {myIP}:9092 
+
+Start Consumer:
+-------------------------
+
+cd kafka_2.13-3.7.1
+bin/kafka-console-consumer.sh --topic {kafkaTopic} --bootstrap-server {myIP}:9092 
